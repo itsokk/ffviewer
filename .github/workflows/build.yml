@@ -32,11 +32,11 @@ jobs:
     - name: Upload Linux binary
       uses: actions/upload-artifact@v3
       with:
-        name: ffviewer
+        name: ffviewer-linux
         path: ./bin/ffviewer
         
     - name: Upload Windows binary
       uses: actions/upload-artifact@v3
       with:
-        name: ffviewer.exe
+        name: ffviewer-windows
         path: ./bin/ffviewer.exe
