@@ -12,7 +12,12 @@ ffviewer is a simple and easy-to-use cross-platform farbfeld viewer made with ra
 | 4      | 32-Bit BE unsigned integer (height)                     |
 | [2222] | 4x16-Bit BE unsigned integers [RGBA] / pixel, row-major |
 
-# Requirements
+# Usage
+
+Grab the latest release for your OS from GitHub Actions or build it with `go build`. Then run `ffviewer filename`, where ffviewer is the path to the ffviewer executable and filename is the path to your farbfeld file.
+On Windows, you can just drag and drop the image onto the executable.
+
+# Build requirements
 
 [Go](https://go.dev/)
 
