@@ -29,10 +29,14 @@ jobs:
       run: |
         go build -o ./bin/ffviewer
 
-    - name: Upload artifacts
+    - name: Upload Linux binary
       uses: actions/upload-artifact@v3
       with:
-        name: build-artifacts
-        path: ./bin/  # Include the built binaries in the root directory
-
-    # Add additional steps here for testing, packaging, or deploying your project
+        name: ffviewer
+        path: ./bin/ffviewer
+        
+    - name: Upload Windows binary
+      uses: actions/upload-artifact@v3
+      with:
+        name: ffviewer.exe
+        path: ./bin/ffviewer.exe
