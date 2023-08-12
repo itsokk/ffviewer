@@ -1,0 +1,38 @@
+name: Build ffviewer
+
+on: [push]
+
+jobs:
+  build:
+    name: Build on Ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: 'stable'
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libgl1-mesa-dev libxi-dev libxcursor-dev libxrandr-dev libxinerama-dev mingw-w64
+
+    - name: Build project for Windows
+      run: |
+        GOOS=windows GOARCH=amd64 CGO_ENABLED=1 CC=x86_64-w64-mingw32-gcc go build -o ./bin/ffviewer.exe
+
+    - name: Build project for Linux
+      run: |
+        go build -o ./bin/ffviewer
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-artifacts
+        path: ./bin/  # Include the built binaries in the root directory
+
+    # Add additional steps here for testing, packaging, or deploying your project
