@@ -24,15 +24,13 @@ jobs:
     - name: Setup Zig
       uses: goto-bus-stop/setup-zig@v2.1.1
 
-    - name: Build project for Windows x86_64 and i386
+    - name: Build project for Windows x86_64
       run: |
         GOOS=windows GOARCH=amd64 CGO_ENABLED=1 CC="zig cc -target x86_64-windows-gnu" go build -o ./bin/win/64/ffviewer.exe
-        GOOS=windows GOARCH=386 CGO_ENABLED=1 CC="zig cc -target i386-pc-windows-gnu" go build -o ./bin/win/32/ffviewer.exe
 
-    - name: Build project for Linux x86_64 and i386
+    - name: Build project for Linux x86_64
       run: |
         GOOS=linux GOARCH=amd64 CGO_ENABLED=1 CC="zig cc -target x86_64-linux-gnu" go build -o ./bin/linux/64/ffviewer
-        GOOS=linux GOARCH=386 CGO_ENABLED=1 CC="zig cc -target i386-pc-linux-gnu" go build -o ./bin/linux/32/ffviewer
 
     - name: Upload Linux x86_64 binary
       uses: actions/upload-artifact@v3
@@ -40,20 +38,8 @@ jobs:
         name: ffviewer-linux-x86_64
         path: ./bin/linux/64/ffviewer
 
-    - name: Upload Linux i386 binary
-      uses: actions/upload-artifact@v3
-      with:
-        name: ffviewer-linux-i386
-        path: ./bin/linux/32/ffviewer
-
     - name: Upload Windows x86_64 binary
       uses: actions/upload-artifact@v3
       with:
         name: ffviewer-windows-x86_64
         path: ./bin/win/64/ffviewer.exe
-
-    - name: Upload Windows i386 binary
-      uses: actions/upload-artifact@v3
-      with:
-        name: ffviewer-windows-i386
-        path: ./bin/win/32/ffviewer.exe
