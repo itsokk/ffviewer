@@ -16,27 +16,44 @@ jobs:
       with:
         go-version: 'stable'
 
-    - name: Install dependencies
+    - name: Install Linux dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libgl1-mesa-dev libxi-dev libxcursor-dev libxrandr-dev libxinerama-dev mingw-w64
+        sudo apt-get install -y libgl1-mesa-dev libxi-dev libxcursor-dev libxrandr-dev libxinerama-dev
 
-    - name: Build project for Windows
+    - name: Setup Zig
+      uses: goto-bus-stop/setup-zig@v2.1.1
+
+    - name: Build project for Windows x86_64 and i386
       run: |
-        GOOS=windows GOARCH=amd64 CGO_ENABLED=1 CC=x86_64-w64-mingw32-gcc go build -o ./bin/ffviewer.exe
+        GOOS=windows GOARCH=amd64 CGO_ENABLED=1 CC="zig cc -target x86_64-windows-gnu" go build -o ./bin/win/64/ffviewer.exe
+        GOOS=windows GOARCH=386 CGO_ENABLED=1 CC="zig cc -target i386-pc-windows-gnu" go build -o ./bin/win/32/ffviewer.exe
 
-    - name: Build project for Linux
+    - name: Build project for Linux x86_64 and i386
       run: |
-        go build -o ./bin/ffviewer
+        GOOS=linux GOARCH=amd64 CGO_ENABLED=1 CC="zig cc -target x86_64-linux-gnu" go build -o ./bin/linux/64/ffviewer
+        GOOS=linux GOARCH=386 CGO_ENABLED=1 CC="zig cc -target i386-pc-linux-gnu" go build -o ./bin/linux/32/ffviewer
 
-    - name: Upload Linux binary
+    - name: Upload Linux x86_64 binary
       uses: actions/upload-artifact@v3
       with:
-        name: ffviewer-linux
-        path: ./bin/ffviewer
-        
-    - name: Upload Windows binary
+        name: ffviewer-linux-x86_64
+        path: ./bin/linux/64/ffviewer
+
+    - name: Upload Linux i386 binary
       uses: actions/upload-artifact@v3
       with:
-        name: ffviewer-windows
-        path: ./bin/ffviewer.exe
+        name: ffviewer-linux-i386
+        path: ./bin/linux/32/ffviewer
+
+    - name: Upload Windows x86_64 binary
+      uses: actions/upload-artifact@v3
+      with:
+        name: ffviewer-windows-x86_64
+        path: ./bin/win/64/ffviewer.exe
+
+    - name: Upload Windows i386 binary
+      uses: actions/upload-artifact@v3
+      with:
+        name: ffviewer-windows-i386
+        path: ./bin/win/32/ffviewer.exe
